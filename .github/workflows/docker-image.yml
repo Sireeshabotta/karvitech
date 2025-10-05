@@ -21,7 +21,7 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Build Docker image
-        run: docker build -t DOCKER_USERNAME/karvitech:latest .
+        run: docker build -t $username/karvitech:latest .
 
       - name: Push Docker image
-        run: docker push DOCKER_USERNAME/karvitech:latest
+        run: docker push $username/karvitech:latest
