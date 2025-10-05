@@ -24,11 +24,11 @@ jobs:
           echo Version is ${{ vars.VERSION }}.${{ github.run_number }}
 
       - name: Build Docker image
-        run: docker build -t ${{ secrets.DOCKER_USERNAME }}/karvitech:${{ vars.VERSION }}.${{ github.run_number }} .
+        run: docker build -t ${{ secrets.DOCKER_USERNAME }}/karvitech .
 
       - name: apply semantic version
         run: |
           git tag ${{ vars.VERSION }}.${{ github.run_number }}
 
       - name: Push Docker image
-        run: docker push ${{ secrets.DOCKER_USERNAME }}/karvitech:${{ vars.VERSION }}.${{ github.run_number }}
+        run: docker push ${{ secrets.DOCKER_USERNAME }}/karvitech
