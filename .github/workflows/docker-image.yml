@@ -2,18 +2,15 @@ name: Docker Image CI
 
 on:
   push:
-    branches: [ "main" ]
-    tags:
-      - 'v*.*.*'
-  pull_request:
-    branches: [ "main" ]
+    branches:
+      - main
 
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
+      - name: Echo version
         uses: actions/checkout@v3
 
       - name: Log in to Docker Hub
@@ -24,13 +21,14 @@ jobs:
 
       - name: Set image version
         run: |
-          if [[ "${GITHUB_REF}" == refs/tags/* ]]; then
-            echo "VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
-          else
-            echo "VERSION=latest" >> $GITHUB_ENV
+          echo Version is ${{ vars.VERSION }}.${{ github.run_number }}
 
       - name: Build Docker image
         run: docker build -t ${{ secrets.DOCKER_USERNAME }}/karvitech:${{ env.VERSION }} .
+
+      - name: apply semantic version
+        run: |
+          git tag ${{ vars.VERSION }}.${{ github.run_number }}
 
       - name: Push Docker image
         run: docker push ${{ secrets.DOCKER_USERNAME }}/karvitech:${{ env.VERSION }}
